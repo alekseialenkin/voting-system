@@ -35,12 +35,14 @@ The project represents a REST API developed using Spring Boot and Spring Data JP
 - Each restaurant provides a new menu daily
 
 ## Technologies
-- REST
 - Java 19
-- Spring Boot (including Spring Security, Spring Data JPA, Spring MVC, Spring Test)
+- Spring Boot including :
+  - Spring Security
+  - Spring Data JPA and Hibernate, H2DB
+  - Spring MVC 
+  - Spring Test
 - JUnit 5
 - Maven
-- JSON
 
 ## Installation and Run
 The project does not require a specific installation process. Simply clone the repository, and to run it, use the command spring-boot:start -f pom.xml
