@@ -1,41 +1,21 @@
 package ru.votesystem.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
+import org.springframework.transaction.annotation.Transactional;
 import ru.votesystem.model.Dish;
-import ru.votesystem.repository.dish.DishRepository;
-
-import java.util.List;
-
-import static ru.votesystem.util.ValidationUtil.checkNotFoundWithId;
+import ru.votesystem.repository.DishRepository;
+import ru.votesystem.repository.RestaurantRepository;
 
 @Service
+@AllArgsConstructor
 public class DishService {
-    private final DishRepository repository;
+    private final DishRepository dishRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public DishService(DishRepository repository) {
-        this.repository = repository;
-    }
-
+    @Transactional
     public Dish create(Dish dish, int resId) {
-        Assert.notNull(dish, "dish must not be null");
-        return repository.save(dish, resId);
-    }
-
-    public Dish get(int id, int restId) {
-        return checkNotFoundWithId(repository.get(id, restId), id);
-    }
-
-    public void delete(int id, int userId) {
-        checkNotFoundWithId(repository.delete(id, userId), id);
-    }
-
-    public List<Dish> getAll(int restId) {
-        return repository.getAll(restId);
-    }
-
-    public void update(Dish dish, int restId) {
-        Assert.notNull(dish, "dish must not be null");
-        checkNotFoundWithId(repository.save(dish, restId), dish.id());
+        dish.setRestaurant(restaurantRepository.getExisted(resId));
+        return dishRepository.save(dish);
     }
 }

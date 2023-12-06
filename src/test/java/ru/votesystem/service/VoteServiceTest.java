@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import ru.votesystem.VoteTestData;
 import ru.votesystem.model.Vote;
+import ru.votesystem.repository.VoteRepository;
 
 import java.time.LocalDateTime;
 
@@ -17,18 +18,21 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
     private VoteService service;
+    @Autowired
+    private VoteRepository repository;
 
     @Test
     void vote() {
         Vote vote = service.vote(new Vote(user, rest2, LocalDateTime.now()),
                 REST2_ID, USER_ID);
-        Assertions.assertThrows(DataIntegrityViolationException.class, () -> service.vote(new Vote(), REST2_ID, USER_ID));
+       service.vote(new Vote(), REST2_ID, USER_ID);
+       Assertions.assertThrows(DataIntegrityViolationException.class, ()->repository.getAll(REST2_ID));
         Assertions.assertNull(service.vote(vote, REST3_ID, USER_ID));
     }
 
     @Test
     void getAll() {
-        Assertions.assertEquals(2, service.getAll(REST1_ID).size());
+        Assertions.assertEquals(2, repository.getAll(REST1_ID).size());
     }
 
     @Test

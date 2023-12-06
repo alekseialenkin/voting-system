@@ -1,20 +1,13 @@
 package ru.votesystem.to;
 
+import lombok.*;
 import org.springframework.util.Assert;
 
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Data
 public abstract class BaseTo {
     protected Integer id;
-
-    public BaseTo() {
-    }
-
-    public BaseTo(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
-    }
 
     public void setId(Integer id) {
         this.id = id;

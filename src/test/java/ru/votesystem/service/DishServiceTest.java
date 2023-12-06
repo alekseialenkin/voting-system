@@ -3,19 +3,20 @@ package ru.votesystem.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import ru.votesystem.error.NotFoundException;
 import ru.votesystem.model.Dish;
-import ru.votesystem.util.exception.NotFoundException;
+import ru.votesystem.repository.DishRepository;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static ru.votesystem.DishTestData.*;
 import static ru.votesystem.RestaurantTestData.REST1_ID;
 
 class DishServiceTest extends AbstractServiceTest {
     @Autowired
     private DishService service;
+    @Autowired
+    private DishRepository repository;
 
     @Test
     void create() {
@@ -24,30 +25,30 @@ class DishServiceTest extends AbstractServiceTest {
         Dish newDish = getNew();
         newDish.setId(newId);
         DISH_MATCHER.assertMatch(created, newDish);
-        DISH_MATCHER.assertMatch(service.get(newId, REST1_ID), newDish);
+        DISH_MATCHER.assertMatch(repository.getExisted(newId), newDish);
     }
 
     @Test
     void get() {
-        DISH_MATCHER.assertMatch(service.get(DISH1_ID, REST1_ID), dish1);
+        DISH_MATCHER.assertMatch(repository.getExisted(DISH1_ID), dish1);
     }
 
     @Test
     void delete() {
-        service.delete(DISH1_ID, REST1_ID);
-        Assertions.assertThrows(NotFoundException.class, () -> service.get(DISH1_ID, REST1_ID));
+        repository.delete(DISH1_ID);
+        Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(DISH1_ID));
     }
 
     @Test
     void getAll() {
-        List<Dish> dishes = service.getAll(REST1_ID);
+        List<Dish> dishes = repository.getAll(REST1_ID);
         DISH_MATCHER.assertMatch(dishes, dish1, dish2);
     }
 
     @Test
     void update() {
         Dish updated = getUpdated();
-        service.update(updated, REST1_ID);
-        DISH_MATCHER.assertMatch(service.get(DISH1_ID, REST1_ID), getUpdated());
+        service.create(updated, REST1_ID);
+        DISH_MATCHER.assertMatch(repository.getExisted(DISH1_ID), getUpdated());
     }
 }
