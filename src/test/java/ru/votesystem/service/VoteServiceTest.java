@@ -26,13 +26,13 @@ class VoteServiceTest extends AbstractServiceTest {
         Vote vote = service.vote(new Vote(user, rest2, LocalDateTime.now()),
                 REST2_ID, USER_ID);
        service.vote(new Vote(), REST2_ID, USER_ID);
-       Assertions.assertThrows(DataIntegrityViolationException.class, ()->repository.getAll(REST2_ID));
+       Assertions.assertThrows(DataIntegrityViolationException.class, ()->repository.getAllForRestaurants(REST2_ID));
         Assertions.assertNull(service.vote(vote, REST3_ID, USER_ID));
     }
 
     @Test
     void getAll() {
-        Assertions.assertEquals(2, repository.getAll(REST1_ID).size());
+        Assertions.assertEquals(2, repository.getAllForRestaurants(REST1_ID).size());
     }
 
     @Test

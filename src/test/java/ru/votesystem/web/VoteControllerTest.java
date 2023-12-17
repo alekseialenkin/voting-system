@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.votesystem.RestaurantTestData.REST1_ID;
 import static ru.votesystem.RestaurantTestData.REST3_ID;
 import static ru.votesystem.UserTestData.USER_MAIL;
 import static ru.votesystem.VoteTestData.*;
@@ -25,12 +24,12 @@ class VoteControllerTest extends AbstractControllerTest {
     @Autowired
     private VoteRepository repository;
 
-    private final static String REST_URL = "/rest/profile/restaurant/{restaurantId}/vote";
+    private final static String REST_URL = "/rest/profile/vote";
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL, REST1_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(VOTE_MATCHER.contentJson(vote1, vote2));

@@ -20,15 +20,15 @@ import static ru.votesystem.util.validation.ValidationUtil.checkNew;
 @Slf4j
 @AllArgsConstructor
 public class VoteController {
-    public static final String REST_URL = "/rest/profile/restaurants/{restaurantId}/votes";
+    public static final String REST_URL = "/rest/profile/votes";
 
     private VoteService service;
     private VoteRepository repository;
 
-    @GetMapping
-    public List<Vote> getAll(@PathVariable int restaurantId) {
+    @GetMapping("/{restaurantId}")
+    public List<Vote> getAllForRestaurants(@PathVariable int restaurantId) {
         log.info("getAll votes for restaurant {}", restaurantId);
-        return repository.getAll(restaurantId);
+        return repository.getAllForRestaurants(restaurantId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -44,5 +44,11 @@ public class VoteController {
         log.info("user {} update vote {} for restaurant {}", user.id(), id, restaurantId);
         assureIdConsistent(vote, id);
         return service.vote(vote, restaurantId, user.id());
+    }
+
+    @GetMapping("/{userId}")
+    public List<Vote> getAllForUser(@PathVariable int userId) {
+        log.info("get all votes for user {}", userId);
+        return repository.getAllForUser(userId);
     }
 }

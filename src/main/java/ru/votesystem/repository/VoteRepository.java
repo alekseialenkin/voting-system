@@ -10,5 +10,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface VoteRepository extends BaseRepository<Vote> {
     @Query("SELECT v FROM Vote v WHERE v.restaurant.id=:restId")
-    List<Vote> getAll(@Param("restId") int restId);
+    List<Vote> getAllForRestaurants(@Param("restId") int restId);
+
+    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId")
+    List<Vote> getAllForUser(@Param("userId") int userId);
 }
