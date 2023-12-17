@@ -20,7 +20,7 @@ import static ru.votesystem.util.validation.ValidationUtil.checkNew;
 @Slf4j
 @AllArgsConstructor
 public class DishController {
-    public static final String REST_URL = "/rest/profile/restaurants/{restaurantId}/dishes";
+    public static final String REST_URL = "/rest/restaurants/{restaurantId}/dishes";
 
     private DishService service;
     private DishRepository repository;
