@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 
 @Entity
-@Table(name = "VOTE", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "restaurant_id"}, name = "vote_unique_user_restaurant_idx"))
+@Table(name = "VOTE", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "restaurant_id", "voted"}, name = "vote_unique_user_restaurant_idx"), @UniqueConstraint(columnNames = {"user_id", "voted"}, name = "vote_unique_user_date_idx")})
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
@@ -20,6 +20,7 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "voted", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     private LocalDateTime voted = LocalDateTime.now();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -7,6 +7,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
+
 @Getter
 @Entity
 @Table(name = "dish")
@@ -20,6 +22,9 @@ public class Dish extends AbstractBaseEntity {
     @Column(name = "name", nullable = false)
     @NotBlank
     private String name;
+
+    @Column(name = "date", nullable = false)
+    private LocalDate date = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
