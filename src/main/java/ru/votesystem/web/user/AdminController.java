@@ -2,7 +2,6 @@ package ru.votesystem.web.user;
 
 import jakarta.validation.Valid;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ public class AdminController extends AbstractUserController {
     public static final String REST_URL = "/rest/profile/users";
 
     @GetMapping
-    @Cacheable("users")
     public List<User> getAll() {
         log.info("getAll()");
         return repository.findAll();
