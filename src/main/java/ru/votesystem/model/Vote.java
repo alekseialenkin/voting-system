@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-@ToString(callSuper = true, exclude = {"restaurant"})
+@ToString(callSuper = true)
 public class Vote extends AbstractBaseEntity {
     @Column(name = "voted", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
@@ -24,12 +24,14 @@ public class Vote extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @ToString.Exclude
     private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @ToString.Exclude
     private User user;
 
     public Vote(User user, Restaurant restaurant, LocalDateTime voted) {

@@ -3,7 +3,6 @@ package ru.votesystem.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -13,10 +12,9 @@ import org.hibernate.annotations.OnDeleteAction;
 @Table(name = "dish")
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(callSuper = true, exclude = {"restaurant"})
+@ToString(callSuper = true)
 public class Dish extends AbstractBaseEntity {
     @Column(name = "price", nullable = false)
-    @NotNull
     private int price;
 
     @Column(name = "name", nullable = false)
@@ -27,6 +25,7 @@ public class Dish extends AbstractBaseEntity {
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
+    @ToString.Exclude
     private Restaurant restaurant;
 
     public Dish(Integer id, int price, String name) {
