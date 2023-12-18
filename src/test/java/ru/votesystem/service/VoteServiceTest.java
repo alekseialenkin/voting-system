@@ -1,18 +1,18 @@
 package ru.votesystem.service;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import ru.votesystem.VoteTestData;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import ru.votesystem.error.VoteDeadLineException;
 import ru.votesystem.model.Vote;
 import ru.votesystem.repository.VoteRepository;
 
-import java.time.LocalDateTime;
-
 import static ru.votesystem.RestaurantTestData.*;
 import static ru.votesystem.UserTestData.USER_ID;
-import static ru.votesystem.UserTestData.user;
+import static ru.votesystem.VoteTestData.*;
 
 class VoteServiceTest extends AbstractServiceTest {
 
@@ -21,13 +21,24 @@ class VoteServiceTest extends AbstractServiceTest {
     @Autowired
     private VoteRepository repository;
 
+    @BeforeEach
+    void init() {
+        service.setClock(BEFORE_DEAD_LINE);
+    }
+
     @Test
+    @Transactional(propagation = Propagation.NEVER)
     void vote() {
-        Vote vote = service.vote(new Vote(user, rest2, LocalDateTime.now()),
-                REST2_ID, USER_ID);
-       service.vote(new Vote(), REST2_ID, USER_ID);
-       Assertions.assertThrows(DataIntegrityViolationException.class, ()->repository.getAllForRestaurants(REST2_ID));
-        Assertions.assertNull(service.vote(vote, REST3_ID, USER_ID));
+        Vote newVote = service.vote(new Vote(), USER_ID, REST2_ID);
+        Assertions.assertNotNull(newVote);
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void updateVote() {
+        Vote newVote = service.vote(new Vote(), USER_ID, REST2_ID);
+        Vote updatedVote = service.vote(new Vote(), USER_ID, REST3_ID);
+        Assertions.assertNotNull(updatedVote);
     }
 
     @Test
@@ -36,10 +47,9 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    void voteAfterDeadline() {
-        Vote voted = service.vote(VoteTestData.VOTE_DEAD_LINE, REST3_ID, USER_ID);
-        Assertions.assertNotNull(service.vote(voted, REST2_ID, USER_ID));
-        voted.setVoted(voted.getVoted().plusHours(3));
-        Assertions.assertNull(service.vote(voted, REST2_ID, USER_ID));
+    @Transactional(propagation = Propagation.NEVER)
+    void voteAfterDeadLine() {
+        service.setClock(AFTER_DEAD_LINE);
+        Assertions.assertThrows(VoteDeadLineException.class, () -> service.vote(new Vote(), USER_ID, REST2_ID));
     }
 }

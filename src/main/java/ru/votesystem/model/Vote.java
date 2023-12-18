@@ -7,20 +7,20 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "VOTE", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "restaurant_id", "voted"}, name = "vote_unique_user_restaurant_idx"), @UniqueConstraint(columnNames = {"user_id", "voted"}, name = "vote_unique_user_date_idx")})
-@Getter
-@Setter
+@Table(name = "VOTE", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "voted"}, name = "vote_unique_user_date_idx"), @UniqueConstraint(columnNames = {"user_id", "restaurant_id", "voted"}, name = "vote_unique_user_restaurant_date_idx")})
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @ToString(callSuper = true)
 public class Vote extends AbstractBaseEntity {
-    @Column(name = "voted", nullable = false, columnDefinition = "timestamp default now()")
+    @Column(name = "voted", nullable = false, columnDefinition = "date default now()")
     @NotNull
-    private LocalDateTime voted = LocalDateTime.now();
+    private LocalDate voted = LocalDate.now();
 
+    @Getter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -28,21 +28,12 @@ public class Vote extends AbstractBaseEntity {
     @ToString.Exclude
     private Restaurant restaurant;
 
+    @Getter
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     @ToString.Exclude
     private User user;
-
-    public Vote(User user, Restaurant restaurant, LocalDateTime voted) {
-        this.user = user;
-        this.restaurant = restaurant;
-        this.voted = voted;
-    }
-
-    public Vote(Integer id, LocalDateTime voted) {
-        super(id);
-        this.voted = voted;
-    }
 }

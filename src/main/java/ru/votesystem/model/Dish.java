@@ -23,7 +23,7 @@ public class Dish extends AbstractBaseEntity {
     @NotBlank
     private String name;
 
-    @Column(name = "date", nullable = false)
+    @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
     private LocalDate date = LocalDate.now();
 
     @ManyToOne(fetch = FetchType.LAZY)
