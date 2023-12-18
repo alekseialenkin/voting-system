@@ -25,14 +25,12 @@ class DishControllerTest extends AbstractControllerTest {
     @Autowired
     private DishRepository repository;
 
-    private final String PROFILE_REST_URL = "/rest/profile/restaurant/{restaurantId}/dish";
-
-    private final String ADMIN_REST_URL = "/rest/admin/restaurant/{restaurantId}/dish";
+    private final String REST_URL = DishController.REST_URL;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(PROFILE_REST_URL, REST1_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL, REST1_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -42,16 +40,7 @@ class DishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void createNotAdmin() throws Exception {
-        perform(MockMvcRequestBuilders.post(PROFILE_REST_URL, REST1_ID)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(DishTestData.getNew())))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
-    void createNot() throws Exception {
-        perform(MockMvcRequestBuilders.post(RestaurantController.REST_URL, REST2_ID)
+        perform(MockMvcRequestBuilders.post(REST_URL, REST1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(DishTestData.getNew())))
                 .andExpect(status().isForbidden());
@@ -60,7 +49,7 @@ class DishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(PROFILE_REST_URL + "/" + DISH3_ID, REST2_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL + "/" + DISH3_ID, REST2_ID))
                 .andExpect(status().isOk())
                 .andExpect(DISH_MATCHER.contentJson(dish3));
     }
@@ -68,7 +57,7 @@ class DishControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(ADMIN_REST_URL + "/" + DISH3_ID, REST2_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + DISH3_ID, REST2_ID))
                 .andExpect(status().isNoContent());
         Assertions.assertThrows(NotFoundException.class, () -> repository.getExisted(DISH3_ID));
     }
@@ -77,7 +66,7 @@ class DishControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         Dish newDish = DishTestData.getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(ADMIN_REST_URL, REST3_ID)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL, REST3_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish)))
                 .andDo(print())
@@ -95,7 +84,7 @@ class DishControllerTest extends AbstractControllerTest {
         Dish updated = DishTestData.getUpdated();
         updated.setId(null);
 
-        perform(MockMvcRequestBuilders.put(ADMIN_REST_URL + "/" + DISH1_ID, REST1_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + DISH1_ID, REST1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())

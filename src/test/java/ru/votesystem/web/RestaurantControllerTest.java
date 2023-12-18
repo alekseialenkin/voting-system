@@ -23,22 +23,21 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Autowired
     private RestaurantRepository repository;
 
-    private static final String PROFILE_REST_URL = "/rest/profile/restaurant";
-    private static final String ADMIN_REST_URL = "/rest/admin/restaurant";
+    private static final String REST_URL = RestaurantController.REST_URL;
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(PROFILE_REST_URL))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(RESTAURANT_MATCHER.contentJson(rest1, rest2, rest3));
+                .andExpect(RESTAURANT_MATCHER.contentJson(rest3, rest2, rest1));
     }
 
     @Test
     @WithUserDetails(value = USER_MAIL)
     void createNotAdmin() throws Exception {
-        perform(MockMvcRequestBuilders.post(PROFILE_REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(getNew())))
                 .andExpect(status().isForbidden());
@@ -56,7 +55,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = USER_MAIL)
     void get() throws Exception {
-        perform(MockMvcRequestBuilders.get(PROFILE_REST_URL + "/" + REST1_ID))
+        perform(MockMvcRequestBuilders.get(REST_URL + "/" + REST1_ID))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(RESTAURANT_MATCHER.contentJson(rest1));
@@ -65,7 +64,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void delete() throws Exception {
-        perform(MockMvcRequestBuilders.delete(ADMIN_REST_URL + "/" + REST1_ID))
+        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + REST1_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> repository.getExisted(REST1_ID));
@@ -75,7 +74,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(ADMIN_REST_URL + "/" + REST1_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + REST1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
@@ -87,7 +86,7 @@ class RestaurantControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         Restaurant newRest = RestaurantTestData.getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(ADMIN_REST_URL)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newRest)))
                 .andDo(print())
