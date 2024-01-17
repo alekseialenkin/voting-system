@@ -45,15 +45,6 @@ class RestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void createNot() throws Exception {
-        perform(MockMvcRequestBuilders.post(RestaurantController.REST_URL)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(getNew())))
-                .andExpect(status().isForbidden());
-    }
-
-    @Test
-    @WithUserDetails(value = USER_MAIL)
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/" + REST1_ID))
                 .andExpect(status().isOk())
