@@ -59,9 +59,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/rest/**").authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/rest/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/rest/restaurants", "/rest/restaurants/{restaurantId}/dishes").hasRole(Role.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/rest/*/restaurants", "/rest/restaurants/{restaurantId}/dishes").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/rest/restaurants", "/rest/restaurants/{restaurantId}/dishes").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/rest/restaurants", "/rest/restaurants/{restaurantId}/dishes").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/rest/profile").anonymous()
                         .requestMatchers("/**").authenticated()
