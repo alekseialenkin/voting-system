@@ -3,6 +3,7 @@ package ru.votesystem.web;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class DishController {
     }
 
     @GetMapping("/today")
+    @Cacheable("dishes")
     public List<Dish> getAllToday(@PathVariable int restaurantId) {
         log.info("getAll dishes today for restaurant{}", restaurantId);
         return repository.getAllToday(restaurantId);

@@ -16,6 +16,7 @@ public class AdminUserController extends AbstractUserController {
     public static final String REST_URL = "/rest/users";
 
     @GetMapping
+    @CacheEvict(value = "users", allEntries = true)
     public List<User> getAll() {
         log.info("getAll()");
         return repository.findAll();

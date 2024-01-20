@@ -8,9 +8,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.util.CollectionUtils;
 import ru.votesystem.util.validation.NoHtml;
 
@@ -38,13 +35,11 @@ public class User extends AbstractNamedEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+    @CollectionTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
             uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role"}, name = "uk_user_role"))
     @Column(name = "role")
     @ElementCollection(fetch = FetchType.EAGER)
-    @BatchSize(size = 200)
-    @JoinColumn
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<Role> roles;
 
     public User(Integer id, String name, String email, String password,  Collection<Role> roles) {
