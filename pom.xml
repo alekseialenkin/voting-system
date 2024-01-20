@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
+        <version>3.2.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ru.votesystem</groupId>
@@ -15,7 +15,7 @@
     <description>Restaurant VoteSystem application Spring Boot migration</description>
 
     <properties>
-        <java.version>19</java.version>
+        <java.version>21</java.version>
         <springdoc.version>2.2.0</springdoc.version>
         <jsoup.version>1.16.1</jsoup.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
