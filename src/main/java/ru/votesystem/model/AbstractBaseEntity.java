@@ -1,5 +1,6 @@
 package ru.votesystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,7 @@ public abstract class AbstractBaseEntity implements Persistable<Integer>, HasId 
     }
 
     @Override
+    @JsonIgnore
     public boolean isNew() {
         return id == null;
     }
