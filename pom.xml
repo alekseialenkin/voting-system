@@ -110,16 +110,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
-                <!--https://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>19</source>
-                    <target>19</target>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
