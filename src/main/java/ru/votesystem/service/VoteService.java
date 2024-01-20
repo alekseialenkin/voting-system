@@ -24,13 +24,16 @@ public class VoteService {
     private Clock clock = Clock.systemDefaultZone();
 
     public Vote vote(Vote vote, int userId, int restaurantId) {
-        if (LocalTime.now(clock).isAfter(DEAD_LINE)) {
-            throw new VoteDeadLineException("You can't vote after 11:00");
-        } else if (voteRepository.update(restaurantId, userId) != 0) {
-            return voteRepository.getByUser(userId);
-        }
         vote.setUser(userRepository.getExisted(userId));
         vote.setRestaurant(restaurantRepository.getExisted(restaurantId));
         return voteRepository.save(vote);
+    }
+
+    public Vote update(Vote vote, int userId, int restaurantId) {
+        if (LocalTime.now(clock).isAfter(DEAD_LINE)) {
+            throw new VoteDeadLineException("You can't update your vote after 11:00");
+        }
+        voteRepository.update(restaurantId, userId);
+        return vote;
     }
 }

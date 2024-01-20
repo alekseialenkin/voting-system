@@ -14,8 +14,7 @@ import ru.votesystem.util.JsonUtil;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.votesystem.RestaurantTestData.REST1_ID;
-import static ru.votesystem.RestaurantTestData.REST2_ID;
+import static ru.votesystem.RestaurantTestData.*;
 import static ru.votesystem.UserTestData.USER_MAIL;
 import static ru.votesystem.VoteTestData.*;
 
@@ -54,10 +53,10 @@ class VoteControllerTest extends AbstractControllerTest {
 
     @Test
     @WithUserDetails(value = USER_MAIL)
-    void voteAfterDeadLine() throws Exception {
+    void updateAfterDeadLine() throws Exception {
         service.setClock(AFTER_DEAD_LINE);
         Vote newVote = new Vote();
-        perform(MockMvcRequestBuilders.post(REST_URL + "/" + REST2_ID)
+        perform(MockMvcRequestBuilders.put(REST_URL + "/" + REST2_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content((JsonUtil.writeValue(newVote))))
                 .andDo(print())

@@ -27,7 +27,6 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    @Transactional(propagation = Propagation.NEVER)
     void vote() {
         Vote newVote = service.vote(new Vote(), USER_ID, REST2_ID);
         Assertions.assertNotNull(newVote);
@@ -37,7 +36,7 @@ class VoteServiceTest extends AbstractServiceTest {
     @Transactional(propagation = Propagation.NEVER)
     void updateVote() {
         Vote newVote = service.vote(new Vote(), USER_ID, REST2_ID);
-        Vote updatedVote = service.vote(new Vote(), USER_ID, REST3_ID);
+        Vote updatedVote = service.update(new Vote(), USER_ID, REST3_ID);
         Assertions.assertNotNull(updatedVote);
     }
 
@@ -48,8 +47,8 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     @Transactional(propagation = Propagation.NEVER)
-    void voteAfterDeadLine() {
+    void updateAfterDeadLine() {
         service.setClock(AFTER_DEAD_LINE);
-        Assertions.assertThrows(VoteDeadLineException.class, () -> service.vote(new Vote(), USER_ID, REST2_ID));
+        Assertions.assertThrows(VoteDeadLineException.class, () -> service.update(new Vote(), USER_ID, REST2_ID));
     }
 }

@@ -13,12 +13,6 @@ public interface VoteRepository extends BaseRepository<Vote> {
     @Query("SELECT v FROM Vote v WHERE v.restaurant.id=:restId")
     List<Vote> getAllForRestaurants(@Param("restId") int restId);
 
-    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId")
-    List<Vote> getAllForUser(@Param("userId") int userId);
-
-    @Query("SELECT v from Vote v WHERE v.user.id=:userId and v.restaurant.id=:restaurantId")
-    Vote getByUserAndRestaurant(@Param("userId") int userId, @Param("restaurantId") int restaurantId);
-
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId and v.voted=current date")
     Vote getByUser(@Param("userId") int userId);
 

@@ -49,7 +49,7 @@ public class VoteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody Vote vote, @PathVariable int restaurantId, @AuthenticationPrincipal AuthorizedUser user) {
         log.info("user {} update for restaurant {}", user.id(), restaurantId);
-        service.vote(vote, user.id(), restaurantId);
+        service.update(vote, user.id(), restaurantId);
     }
 
     @GetMapping("/today")
