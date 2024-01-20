@@ -31,6 +31,12 @@ public class DishController {
         return repository.getAll(restaurantId);
     }
 
+    @GetMapping("/today")
+    public List<Dish> getAllToday(@PathVariable int restaurantId) {
+        log.info("getAll dishes today for restaurant{}", restaurantId);
+        return repository.getAllToday(restaurantId);
+    }
+
     @GetMapping("/{id}")
     public Dish get(@PathVariable int id, @PathVariable int restaurantId) {
         log.info("get dish {} for restaurant {}", id, restaurantId);

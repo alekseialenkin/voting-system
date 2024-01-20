@@ -17,6 +17,9 @@ public interface DishRepository extends BaseRepository<Dish> {
     @Query("SELECT d FROM Dish d WHERE d.restaurant.id=:restId")
     List<Dish> getAll(@Param("restId") int restId);
 
+    @Query("SELECT d from Dish d WHERE d.restaurant.id=:restId and d.date=current date")
+    List<Dish> getAllToday(@Param("restId") int restId);
+
     default Dish getExistedOrBelonged(int restId, int id) {
         return get(id, restId).orElseThrow(
                 () -> new DataConflictException("Dish id=" + id + "   is not exist or doesn't belong to Restaurant id=" + restId));
