@@ -51,4 +51,10 @@ public class VoteController {
         log.info("user {} update for restaurant {}", user.id(), restaurantId);
         service.vote(vote, user.id(), restaurantId);
     }
+
+    @GetMapping("/today")
+    public Vote get(@AuthenticationPrincipal AuthorizedUser user) {
+        log.info("get vote for user {}", user.id());
+        return repository.getByUser(user.id());
+    }
 }
