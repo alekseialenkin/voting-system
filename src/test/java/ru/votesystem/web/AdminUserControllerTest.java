@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.votesystem.error.NotFoundException;
 import ru.votesystem.model.User;
 import ru.votesystem.repository.UserRepository;
-import ru.votesystem.web.user.AdminController;
+import ru.votesystem.web.user.AdminUserController;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.votesystem.UserTestData.*;
 
-class AdminControllerTest extends AbstractControllerTest {
-    private static final String REST_URL = AdminController.REST_URL + '/';
+class AdminUserControllerTest extends AbstractControllerTest {
+    private static final String REST_URL = AdminUserController.REST_URL + '/';
 
     @Autowired
     private UserRepository repository;
@@ -26,7 +26,7 @@ class AdminControllerTest extends AbstractControllerTest {
     @Test
     @WithUserDetails(value = ADMIN_MAIL)
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(AdminController.REST_URL))
+        perform(MockMvcRequestBuilders.get(AdminUserController.REST_URL))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -48,7 +48,7 @@ class AdminControllerTest extends AbstractControllerTest {
     @WithUserDetails(value = ADMIN_MAIL)
     void create() throws Exception {
         User newUser = getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(AdminController.REST_URL)
+        ResultActions action = perform(MockMvcRequestBuilders.post(AdminUserController.REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonWithPassword(newUser, newUser.getPassword())))
                 .andExpect(status().isOk());
